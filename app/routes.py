@@ -26,11 +26,14 @@ def user(name):
 # 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
 
 
-@app.route('/login',methods=['GET','POST'])
+@app.route('/login',methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    # validate_on_submit():form表单请求为get方法时返回False,Post方法返回True
+    #    form.validate_on_submit()等价于request.method==' post '  and  from.validate()-表单里必填项有值
     if form.validate_on_submit():
-        flash('Login request for user {},remember me={}'.format(form.username.data,form.remember_me.data))
+        # 将提交后的数据显示在页面上
+        flash('Login requested for user {},remember_me={}'.format(form.username.data, form.remember_me.data))
+        # form.validate_on_submit()=True时，代表登录成功，进入Index页面
         return redirect(url_for('index'))
-    return render_template('login.html',title='Sign in',form=form)
+    # 若未提交数据，则请求后再次转到login页面
+    return render_template('login.html', title='Sign In', form=form)
