@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, BooleanField
-from wtforms.validators import DataRequired
+from wtforms.validators import email_validator,ValidationError, DataRequired, EqualTo, Email
+from app.models import User
 
 
 # 登录表单，继承FlaskForm
@@ -16,3 +17,24 @@ class LoginForm(FlaskForm):
 
     # 提交按钮，若username与password为空时点击submit则视为get请求
     submit = SubmitField('Submit')
+
+
+# 注册表单
+class RegisterForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    password = PasswordField('Password',validators=[DataRequired()])
+    # 二次输入密码，从wtforms.validators导入EqualTo，使用方法：参数2 = EqualTo('要校验的参数1','提示语句')，校验表单中两次的数据是否一致
+    repeat_password = PasswordField('RepeatPassword', validators=[DataRequired(), EqualTo("password","password should be matched")])
+    email = StringField("Email", validators=[DataRequired()])
+    submit = SubmitField('Register')
+
+    def validate_username(self, username):
+        # 提交表单为对象，使用对象.data获取属性
+        user = User.query.filter_by(username=username.data).first()
+        if user is not None:
+            raise ValidationError('name has been register,please input another one')
+
+    def valita_email(self, email):
+        user = User.query.filter_by(email=email.data).first()
+        if user is not None:
+            raise ValidationError('email has been register,please input another one')
