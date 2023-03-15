@@ -10,9 +10,11 @@
     <div>
         Microblog:
         <a href="{{ url_for('index') }}">Home</a>
+{#        is_anoymous:是否为已登录状态，已登录时-False，未登录True#}
         {% if current_user.is_anoymous %}
         <a href="{{ url_for('login') }}">Login</a>
         {% else %}
+            <a href="{{ url_for('user', username=current_user.username) }}">Profile</a>
         <a href="{{ url_for('logout') }}">Logout</a>
         {% endif %}
     </div>

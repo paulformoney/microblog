@@ -1,9 +1,10 @@
 from app import app, db
 from flask import request, render_template, flash, redirect, url_for
-from app.form import LoginForm, RegisterForm
+from app.form import LoginForm, RegisterForm, EditProfileForm
 from flask_login import login_required, current_user, login_user, logout_user
 from app.models import User
 from werkzeug.urls import url_parse
+from datetime import datetime
 
 
 # login_required，添加了该修饰器的页面必须为登录状态才可访问
@@ -24,10 +25,6 @@ def index():
     return render_template('index.html', title='Home', posts=posts)
 
 
-@app.route('/user/<name>')
-def user(name):
-    return f"hello,{name}"
-# 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
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -87,3 +84,45 @@ def register():
         return redirect(url_for('login'))
 
     return render_template('register.html',title="Sign In",form=form)
+
+
+@app.route('/user/<username>')
+@login_required
+def user(username):
+    # first_or_404，若未找到结果返回404错误
+    user = User.query.filter_by(username=username).first_or_404()
+    posts = [
+        {'author': user, 'body': 'Test post #1'},
+        {'author': user, 'body': 'Test post #2'}
+    ]
+    return render_template('user.html', user=user, posts=posts)
+
+
+# 新增函数，记录发起请求的时间，由于current_user的机制，无需db.commit.add()
+@app.before_request
+def before_request():
+    if current_user.is_authenticated:
+        current_user.last_seen = datetime.utcnow()
+        db.session.commit()
+
+
+# 新增路由，处理提交编辑个人资料的表单内容并提交到数据库，必须为登录状态才可使用
+@app.route('/user/profile',methods=['GET','POST'])
+@login_required
+def edit_profile():
+    form = EditProfileForm()
+    # 若为post请求（用户提交了个人资料数据），则将表单中的数据赋给当前用户并commit
+    if form.validate_on_submit():
+        current_user.username = form.username.data
+        current_user.about_me = form.about_me.data
+        # current_user机制下，commit即视为commit+add
+        db.session.commit()
+        flash('Your changes have been saved.')
+        # 返回页面
+        return redirect(url_for('edit_profile'))
+
+    # 若方法为get，则将当前用户的数据返回给表单并显示
+    elif request.method == 'GET':
+        form.username.data = current_user.username
+        form.about_me.data = current_user.about_me
+    return render_template('edit_profile.html', title='Edit Profile', form=form)

@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField, BooleanField
-from wtforms.validators import email_validator,ValidationError, DataRequired, EqualTo, Email
+from wtforms import StringField, TextAreaField, SubmitField, PasswordField, BooleanField
+from wtforms.validators import email_validator, ValidationError, DataRequired, EqualTo, Email, Length
 from app.models import User
 
 
@@ -38,3 +38,22 @@ class RegisterForm(FlaskForm):
         user = User.query.filter_by(email=email.data).first()
         if user is not None:
             raise ValidationError('email has been register,please input another one')
+
+
+# 编辑个人资料类，可修改用户名与个人简介
+class EditProfileForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    about_me = TextAreaField('about_me ', validators=[Length(0, 140)])
+
+    submit = SubmitField('Commit Edit')
+
+    # # 验证用户名
+    # def __init__(self, original_username, *args, **kwargs):
+    #     super(EditProfileForm, self).__init__(*args, **kwargs)
+    #     self.original_username = original_username
+    #
+    # def validate_username(self, username):
+    #     if username.data != self.original_username:
+    #         user = User.query.filter_by(username=self.username.data).first()
+    #         if user is not None:
+    #             raise ValidationError('Please use a different username.')
