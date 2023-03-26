@@ -1,0 +1,73 @@
+2023-03-13 22:42:44,001 INFO: Microblog startup [in E:\orange\microblog\app\__init__.py:44]
+2023-03-13 22:44:19,777 INFO: Microblog startup [in E:\orange\microblog\app\__init__.py:44]
+2023-03-13 22:44:32,088 ERROR: Exception on /user/profile [POST] [in E:\orange\microblog\venv\lib\site-packages\flask\app.py:1454]
+Traceback (most recent call last):
+  File "E:\orange\microblog\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1799, in _execute_context
+    self.dialect.do_execute(
+  File "E:\orange\microblog\venv\lib\site-packages\sqlalchemy\engine\default.py", line 717, in do_execute
+    cursor.execute(statement, parameters)
+sqlite3.IntegrityError: UNIQUE constraint failed: user.username
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "E:\orange\microblog\venv\lib\site-packages\flask\app.py", line 2070, in wsgi_app
+    response = self.full_dispatch_request()
+  File "E:\orange\microblog\venv\lib\site-packages\flask\app.py", line 1515, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "E:\orange\microblog\venv\lib\site-packages\flask\app.py", line 1513, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "E:\orange\microblog\venv\lib\site-packages\flask\app.py", line 1499, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "E:\orange\microblog\venv\lib\site-packages\flask_login\utils.py", line 290, in decorated_view
+    return current_app.ensure_sync(func)(*args, **kwargs)
+  File "E:\orange\microblog\app\routes.py", line 119, in edit_profile
+    db.session.commit()
+  File "<string>", line 2, in commit
+  File "E:\orange\microblog\venv\lib\site-packages\sqlalchemy\orm\session.py", line 1428, in commit
+    self._transaction.commit(_to_root=self.future)
+  File "E:\orange\microblog\venv\lib\site-packages\sqlalchemy\orm\session.py", line 829, in commit
+    self._prepare_impl()
+  File "E:\orange\microblog\venv\lib\site-packages\sqlalchemy\orm\session.py", line 808, in _prepare_impl
+    self.session.flush()
+  File "E:\orange\microblog\venv\lib\site-packages\sqlalchemy\orm\session.py", line 3339, in flush
+    self._flush(objects)
+  File "E:\orange\microblog\venv\lib\site-packages\sqlalchemy\orm\session.py", line 3479, in _flush
+    transaction.rollback(_capture_exception=True)
+  File "E:\orange\microblog\venv\lib\site-packages\sqlalchemy\util\langhelpers.py", line 70, in __exit__
+    compat.raise_(
+  File "E:\orange\microblog\venv\lib\site-packages\sqlalchemy\util\compat.py", line 207, in raise_
+    raise exception
+  File "E:\orange\microblog\venv\lib\site-packages\sqlalchemy\orm\session.py", line 3439, in _flush
+    flush_context.execute()
+  File "E:\orange\microblog\venv\lib\site-packages\sqlalchemy\orm\unitofwork.py", line 456, in execute
+    rec.execute(self)
+  File "E:\orange\microblog\venv\lib\site-packages\sqlalchemy\orm\unitofwork.py", line 630, in execute
+    util.preloaded.orm_persistence.save_obj(
+  File "E:\orange\microblog\venv\lib\site-packages\sqlalchemy\orm\persistence.py", line 234, in save_obj
+    _emit_update_statements(
+  File "E:\orange\microblog\venv\lib\site-packages\sqlalchemy\orm\persistence.py", line 998, in _emit_update_statements
+    c = connection._execute_20(
+  File "E:\orange\microblog\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1611, in _execute_20
+    return meth(self, args_10style, kwargs_10style, execution_options)
+  File "E:\orange\microblog\venv\lib\site-packages\sqlalchemy\sql\elements.py", line 323, in _execute_on_connection
+    return connection._execute_clauseelement(
+  File "E:\orange\microblog\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1478, in _execute_clauseelement
+    ret = self._execute_context(
+  File "E:\orange\microblog\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1842, in _execute_context
+    self._handle_dbapi_exception(
+  File "E:\orange\microblog\venv\lib\site-packages\sqlalchemy\engine\base.py", line 2023, in _handle_dbapi_exception
+    util.raise_(
+  File "E:\orange\microblog\venv\lib\site-packages\sqlalchemy\util\compat.py", line 207, in raise_
+    raise exception
+  File "E:\orange\microblog\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1799, in _execute_context
+    self.dialect.do_execute(
+  File "E:\orange\microblog\venv\lib\site-packages\sqlalchemy\engine\default.py", line 717, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: user.username
+[SQL: UPDATE user SET username=?, about_me=? WHERE user.id = ?]
+[parameters: ('cxk', 'asd', 4)]
+(Background on this error at: https://sqlalche.me/e/14/gkpj)
+2023-03-19 17:33:21,715 INFO: Microblog startup [in E:\orange\microblog\app\__init__.py:52]
+2023-03-19 17:33:31,926 INFO: Microblog startup [in E:\orange\microblog\app\__init__.py:52]
+2023-03-19 20:25:32,497 INFO: Microblog startup [in E:\orange\microblog\app\__init__.py:52]
