@@ -2,7 +2,7 @@ from app import app, db
 from flask import request, render_template, flash, redirect, url_for
 from app.form import LoginForm, RegisterForm, EditProfileForm
 from flask_login import login_required, current_user, login_user, logout_user
-from app.models import User
+from app.models import User, follwers
 from werkzeug.urls import url_parse
 from datetime import datetime
 
@@ -126,3 +126,18 @@ def edit_profile():
         form.username.data = current_user.username
         form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', title='Edit Profile', form=form)
+
+
+@app.route('/follow/<username>')
+def follow(username):
+    user = User.query.filter_by(username=username).first()
+    if user is None:
+        flash('User {} not fount'.format(username))
+        return redirect(url_for('index'))
+    if user == current_user:
+        flash('you cannot follow yourself')
+        return redirect(url_for('user', username=username))
+    current_user.follow(user)
+    db.session.commit()
+    flash('you are following {}'.format(username))
+    return redirect(url_for('user', username=username))
