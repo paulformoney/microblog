@@ -37,10 +37,10 @@ class User(UserMixin, db.Model):
         # 记录该关系名称的表，即上面定义的follwers表
         secondary=follwers,
 
-        # 粉丝id
+        # 粉丝id，指定了左侧实体（关注者）与关联表链接的条件
         primaryjoin=(follwers.c.follwer_id == id),
 
-        # 被关注者id
+        # 被关注者id，指定了右侧实体（被关注者）与关联表链接的条件
         secondaryjoin=(follwers.c.follwed_id == id),
 
         # 关系，从右侧查询时，关系名为followers，即User().followers可获取你关注了xx
